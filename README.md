@@ -1,7 +1,7 @@
 # AndroidComposeCTF1
 An Android Composable CTF Challenge
 
-There is a flag in the applicaiton you should display to complete the challenge.
+There is a flag in the application you should display to complete the challenge.
 
 ## Android Compose CTF Challenge 1
 
