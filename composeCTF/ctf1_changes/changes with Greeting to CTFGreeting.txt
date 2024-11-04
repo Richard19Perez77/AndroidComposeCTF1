@@ -1,0 +1,106 @@
+Tools Used
+
+adb - install apk
+jadx - view smali in java code
+apktool - decompile into smali, rebuild into signed apk
+apsigner - sign apk for device install
+
+Steps to solve
+1. Find Composable with Flag String
+2. Replace composable shown with new one
+
+Changes or Difference List
+
+1. How Composable is setup
+.line 28
+const-string p3, "Android"
+
+invoke-static {p3, p1, p2, v2, v1}, Lcom/rperez/composectf1/MainActivityKt;->Greeting(Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+
+to
+
+.line 28
+invoke-static {p1, p2, v2, v2}, Lcom/rperez/composectf1/MainActivityKt;->CTFGreeting(Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	
+2.
+.method public static synthetic $r8$lambda$Qwc6zyVDrMFSpifWv5iS7YIWIFE(Ljava/lang/String;Landroidx/compose/ui/Modifier;IILandroidx/compose/runtime/Composer;I)Lkotlin/Unit;
+	.locals 0
+
+	invoke-static/range {p0 .. p5}, Lcom/rperez/composectf1/MainActivityKt;->Greeting$lambda$0(Ljava/lang/String;Landroidx/compose/ui/Modifier;IILandroidx/compose/runtime/Composer;I)Lkotlin/Unit;
+
+	move-result-object p0
+
+	return-object p0
+.end method
+
+to
+
+# direct methods
+.method public static synthetic $r8$lambda$FfVDQ_FJYLKQbDiC3UfqwNxQYkg(Landroidx/compose/ui/Modifier;IILandroidx/compose/runtime/Composer;I)Lkotlin/Unit;
+	.locals 0
+
+	invoke-static {p0, p1, p2, p3, p4}, Lcom/rperez/composectf1/MainActivityKt;->CTFGreeting$lambda$1(Landroidx/compose/ui/Modifier;IILandroidx/compose/runtime/Composer;I)Lkotlin/Unit;
+
+	move-result-object p0
+
+	return-object p0
+.end method
+	
+3. 
+.method private static final Greeting$lambda$0(Ljava/lang/String;Landroidx/compose/ui/Modifier;IILandroidx/compose/runtime/Composer;I)Lkotlin/Unit;
+    .locals 0
+
+    const-string p5, "$name"
+
+    invoke-static {p0, p5}, Lkotlin/jvm/internal/Intrinsics;->checkNotNullParameter(Ljava/lang/Object;Ljava/lang/String;)V
+
+    or-int/lit8 p2, p2, 0x1
+
+    invoke-static {p2}, Landroidx/compose/runtime/RecomposeScopeImplKt;->updateChangedFlags(I)I
+
+    move-result p2
+
+    invoke-static {p0, p1, p4, p2, p3}, Lcom/rperez/composectf1/MainActivityKt;->Greeting(Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+
+    sget-object p0, Lkotlin/Unit;->INSTANCE:Lkotlin/Unit;
+
+    return-object p0
+.end method
+
+to
+
+.method private static final CTFGreeting$lambda$1(Landroidx/compose/ui/Modifier;IILandroidx/compose/runtime/Composer;I)Lkotlin/Unit;
+    .locals 0
+
+    or-int/lit8 p1, p1, 0x1
+
+    invoke-static {p1}, Landroidx/compose/runtime/RecomposeScopeImplKt;->updateChangedFlags(I)I
+
+    move-result p1
+
+    invoke-static {p0, p3, p1, p2}, Lcom/rperez/composectf1/MainActivityKt;->CTFGreeting(Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+
+    sget-object p0, Lkotlin/Unit;->INSTANCE:Lkotlin/Unit;
+
+    return-object p0
+.end method
+
+final changes made to files
+1. add new composable to replace
+2. remove string param register
+
+start with seeing android text composable
+build with apk tool
+sign to release apk
+install to device
+run
+see flag text composable and done
+
+Composables are defined in each branch but the section 1. composables are assigned only once, and the param for Android won't be used so first param is skipped in invoke-static call and the v2 register will be changed to v1 to match original registers used. Here's the final section code change to overrite in smali file.
+
+.line 28
+invoke-static {p1, p2, v2, v1}, Lcom/rperez/composectf1/MainActivityKt;->CTFGreeting(Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+
+run apk's tt see before and after
+challenge apk: app-release.apk
+solution apk: signed-app-release.apk
