@@ -5,7 +5,7 @@ There is a flag in the application you should display to complete the challenge.
 
 ## Android Compose CTF Challenge 1
 
-There are three folder's in the ctf1 folder is the challenge apk this will show this screen, reverse engineer this jar to show solution flag on screen
+There are three folder's in the ctf1 folder is the challenge apk this will show this screen, reverse engineer this apk to show solution flag on screen
 
 <img src="https://github.com/user-attachments/assets/ebeb2cc1-a17c-4f1c-9ec9-79bc011fd864" alt="challenge" width="300" />
 
