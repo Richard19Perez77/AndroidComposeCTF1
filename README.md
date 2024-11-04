@@ -14,3 +14,5 @@ There is a flag in the application you should display to complete the challenge.
 <img src="https://github.com/user-attachments/assets/786ac54e-5b94-49c3-baf5-e7edb6339899" alt="solution" width="300" />
 
 3. The last folder is solution and it contains a jar of the final project with changes made, you can decompile this to see solution as well
+
+* This apk is compiled from an Android Studio project with the changes made.
